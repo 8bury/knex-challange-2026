@@ -8,7 +8,9 @@ const routes = Router();
 
 routes.use(globalErrorHandler);
 
-
+routes.get("/health", (req, res) => {
+  res.status(200).json({ message: "OK" });
+});
 
 routes.use("/auth", authRoutes);
 routes.use("/products", productsRoutes);
