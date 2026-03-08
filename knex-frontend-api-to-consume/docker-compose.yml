@@ -5,7 +5,7 @@ services:
       dockerfile: Dockerfile
     container_name: knex-challange-2026-app
     ports:
-      - "80:3000"
+      - "3000:3000"
     env_file:
       - .env
     volumes:
