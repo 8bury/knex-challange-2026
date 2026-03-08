@@ -20,14 +20,7 @@ productsRoutes.post(
   createProductByUser
 );
 
-productsRoutes.get("/", 
-  celebrate({
-    [Segments.QUERY]: Joi.object().keys({
-      store_id: Joi.number().required(),
-    }),
-  }),
-  showProductsByUser
-);
+productsRoutes.get("/", showProductsByUser);
 
 productsRoutes.put(
   "/:product_id",
