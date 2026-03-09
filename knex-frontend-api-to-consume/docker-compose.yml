@@ -15,6 +15,16 @@ services:
     networks:
       - app-network
 
+  certbot-init:
+    image: certbot/certbot
+    container_name: knex-challange-2026-certbot-init
+    network_mode: host
+    volumes:
+      - /etc/letsencrypt:/etc/letsencrypt
+      - /var/www/certbot:/var/www/certbot
+    command: certonly --standalone -d knex.zernis.space --email arthurfmedeiros77@gmail.com --agree-tos --non-interactive
+    restart: "no"
+
   nginx:
     image: nginx:alpine
     container_name: knex-challange-2026-nginx
@@ -27,7 +37,10 @@ services:
       - /var/www/certbot:/var/www/certbot:ro
     command: [nginx, "-g", "daemon off;"]
     depends_on:
-      - app
+      app:
+        condition: service_started
+      certbot-init:
+        condition: service_completed_successfully
     networks:
       - app-network
     restart: unless-stopped
@@ -39,8 +52,6 @@ services:
       - /etc/letsencrypt:/etc/letsencrypt
       - /var/www/certbot:/var/www/certbot
     command: renew --webroot -w /var/www/certbot
-    depends_on:
-      - nginx
 
   db:
     image: postgres:16-alpine
