@@ -10,6 +10,7 @@ class User {
     public name: string,
     public email: string,
     private passwordHash: string,
+    public companyId: UUID | null,
     public readonly createdAt: Date,
     public updatedAt: Date,
     public active: boolean,
@@ -19,7 +20,7 @@ class User {
     User.validateName(name);
     User.validateEmail(email);
     User.validatePasswordHash(passwordHash);
-    return new User(randomUUID(), name, email, passwordHash, new Date(), new Date(), true);
+    return new User(randomUUID(), name, email, passwordHash, null, new Date(), new Date(), true);
   }
 
   static carregar(
@@ -27,11 +28,12 @@ class User {
     name: string,
     email: string,
     passwordHash: string,
+    companyId: UUID | null,
     createdAt: Date,
     updatedAt: Date,
     active: boolean,
   ): User {
-    return new User(id, name, email, passwordHash, createdAt, updatedAt, active);
+    return new User(id, name, email, passwordHash, companyId, createdAt, updatedAt, active);
   }
 
   private static validateName(name: string) {
@@ -50,6 +52,20 @@ class User {
 
   getPasswordHash(): string {
     return this.passwordHash;
+  }
+
+  isCollaborator(): boolean {
+    return this.companyId !== null;
+  }
+
+  linkToCompany(companyId: UUID) {
+    this.companyId = companyId;
+    this.updatedAt = new Date();
+  }
+
+  unlinkFromCompany() {
+    this.companyId = null;
+    this.updatedAt = new Date();
   }
 
   changeName(name: string) {
