@@ -1,47 +1,84 @@
-import { UUID } from "crypto";
+import { randomUUID, UUID } from "crypto";
+import { InvalidFieldError } from "../errors/InvalidFieldError";
+
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const MIN_NAME_LENGTH = 2;
 
 class User {
-  constructor(
+  private constructor(
     public readonly id: UUID,
     public name: string,
     public email: string,
     private passwordHash: string,
     public readonly createdAt: Date,
     public updatedAt: Date,
-    public active: boolean = true,
+    public active: boolean,
   ) { }
-  
+
+  static criar(name: string, email: string, passwordHash: string): User {
+    User.validateName(name);
+    User.validateEmail(email);
+    User.validatePasswordHash(passwordHash);
+    return new User(randomUUID(), name, email, passwordHash, new Date(), new Date(), true);
+  }
+
+  static carregar(
+    id: UUID,
+    name: string,
+    email: string,
+    passwordHash: string,
+    createdAt: Date,
+    updatedAt: Date,
+    active: boolean,
+  ): User {
+    return new User(id, name, email, passwordHash, createdAt, updatedAt, active);
+  }
+
+  private static validateName(name: string) {
+    if (!name.trim()) throw new InvalidFieldError("name", "cannot be empty");
+    if (name.trim().length < MIN_NAME_LENGTH) throw new InvalidFieldError("name", `must be at least ${MIN_NAME_LENGTH} characters`);
+  }
+
+  private static validateEmail(email: string) {
+    if (!email.trim()) throw new InvalidFieldError("email", "cannot be empty");
+    if (!EMAIL_REGEX.test(email)) throw new InvalidFieldError("email", "invalid format");
+  }
+
+  private static validatePasswordHash(passwordHash: string) {
+    if (!passwordHash.trim()) throw new InvalidFieldError("password", "cannot be empty");
+  }
+
+  getPasswordHash(): string {
+    return this.passwordHash;
+  }
+
   changeName(name: string) {
-    if (!name.trim()) {
-      throw new Error("Name cannot be empty");
-    }
+    User.validateName(name);
     this.name = name;
     this.updatedAt = new Date();
   }
-  
+
   changeEmail(email: string) {
-    if (!email.trim()) {
-      throw new Error("Email cannot be empty");
-    }
+    User.validateEmail(email);
     this.email = email;
     this.updatedAt = new Date();
   }
-  
+
   changePassword(newPasswordHash: string) {
-    if (!newPasswordHash.trim()) {
-      throw new Error("Password cannot be empty");
-    }
+    User.validatePasswordHash(newPasswordHash);
     this.passwordHash = newPasswordHash;
     this.updatedAt = new Date();
   }
-  
+
   deactivate() {
     this.active = false;
     this.updatedAt = new Date();
   }
-  
+
   activate() {
     this.active = true;
     this.updatedAt = new Date();
   }
 }
+
+export { User };

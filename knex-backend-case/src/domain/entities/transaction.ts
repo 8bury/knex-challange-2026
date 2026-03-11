@@ -1,9 +1,10 @@
-import { UUID } from "crypto";
+import { randomUUID, UUID } from "crypto";
+import { InvalidFieldError } from "../errors/InvalidFieldError";
 
 class Transaction {
   public readonly totalPrice: number;
 
-  constructor(
+  private constructor(
     public readonly id: UUID,
     public readonly userId: UUID,
     public readonly productId: UUID,
@@ -11,8 +12,25 @@ class Transaction {
     public readonly unitPrice: number,
     public readonly createdAt: Date,
   ) {
-    if (quantity <= 0) throw new Error("Quantity must be greater than zero");
-    if (unitPrice <= 0) throw new Error("Unit price must be greater than zero");
+    if (quantity <= 0) throw new InvalidFieldError("quantity", "must be greater than zero");
+    if (unitPrice <= 0) throw new InvalidFieldError("unitPrice", "must be greater than zero");
     this.totalPrice = quantity * unitPrice;
   }
+
+  static criar(userId: UUID, productId: UUID, quantity: number, unitPrice: number): Transaction {
+    return new Transaction(randomUUID(), userId, productId, quantity, unitPrice, new Date());
+  }
+
+  static carregar(
+    id: UUID,
+    userId: UUID,
+    productId: UUID,
+    quantity: number,
+    unitPrice: number,
+    createdAt: Date,
+  ): Transaction {
+    return new Transaction(id, userId, productId, quantity, unitPrice, createdAt);
+  }
 }
+
+export { Transaction };
