@@ -1,5 +1,5 @@
 import "dotenv/config";
-import express from "express";
+import express, { NextFunction, Request, Response } from "express";
 import { healthRouter } from "./http/routes/health.routes.js";
 import { authRouter } from "./http/routes/auth.routes.js";
 
@@ -9,3 +9,8 @@ app.use(express.json());
 
 app.use("/api", healthRouter);
 app.use("/api", authRouter);
+
+app.use((err: Error, _req: Request, res: Response, _next: NextFunction) => {
+  console.error(err);
+  res.status(500).json({ error: "Internal server error" });
+});
