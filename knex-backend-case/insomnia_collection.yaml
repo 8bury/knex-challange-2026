@@ -321,6 +321,172 @@ collection:
                 send: true
                 store: true
               rebuildPath: true
+      - name: Products
+        meta:
+          id: fld_c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9
+          created: 1773316707480
+          modified: 1773316707480
+          sortKey: -1773316702547
+          description: ""
+        children:
+          - url: "{{base_url}}/companies/{{company_id}}/products"
+            name: Create Product
+            meta:
+              id: req_b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3
+              created: 1773316707481
+              modified: 1773316707481
+              isPrivate: false
+              description: ""
+              sortKey: -1773316702546
+            method: POST
+            body:
+              mimeType: application/json
+              text: |-
+                {
+                	"name": "iPhone 15",
+                	"description": "Latest Apple smartphone",
+                	"price": 4999.99,
+                	"stock": 100
+                }
+            headers:
+              - name: Content-Type
+                value: application/json
+            authentication:
+              type: bearer
+              disabled: false
+              token: "{{token}}"
+              prefix: ""
+            settings:
+              renderRequestBody: true
+              encodeUrl: true
+              followRedirects: global
+              cookies:
+                send: true
+                store: true
+              rebuildPath: true
+          - url: "{{base_url}}/products"
+            name: List Products
+            meta:
+              id: req_c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4
+              created: 1773316707482
+              modified: 1773316707482
+              isPrivate: false
+              description: ""
+              sortKey: -1773316702545
+            method: GET
+            parameters:
+              - name: page
+                value: "1"
+                disabled: true
+              - name: limit
+                value: "20"
+                disabled: true
+              - name: search
+                value: ""
+                disabled: true
+              - name: companyId
+                value: "{{company_id}}"
+                disabled: true
+              - name: minPrice
+                value: ""
+                disabled: true
+              - name: maxPrice
+                value: ""
+                disabled: true
+            authentication:
+              type: bearer
+              disabled: false
+              token: "{{token}}"
+              prefix: ""
+            settings:
+              renderRequestBody: true
+              encodeUrl: true
+              followRedirects: global
+              cookies:
+                send: true
+                store: true
+              rebuildPath: true
+          - url: "{{base_url}}/products/{{product_id}}"
+            name: Get Product Details
+            meta:
+              id: req_d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5
+              created: 1773316707483
+              modified: 1773316707483
+              isPrivate: false
+              description: ""
+              sortKey: -1773316702544
+            method: GET
+            authentication:
+              type: bearer
+              disabled: false
+              token: "{{token}}"
+              prefix: ""
+            settings:
+              renderRequestBody: true
+              encodeUrl: true
+              followRedirects: global
+              cookies:
+                send: true
+                store: true
+              rebuildPath: true
+          - url: "{{base_url}}/products/{{product_id}}"
+            name: Update Product
+            meta:
+              id: req_e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6
+              created: 1773316707484
+              modified: 1773316707484
+              isPrivate: false
+              description: ""
+              sortKey: -1773316702543
+            method: PUT
+            body:
+              mimeType: application/json
+              text: |-
+                {
+                	"name": "iPhone 15 Pro",
+                	"description": "Updated description here",
+                	"price": 5499.99,
+                	"stock": 80
+                }
+            headers:
+              - name: Content-Type
+                value: application/json
+            authentication:
+              type: bearer
+              disabled: false
+              token: "{{token}}"
+              prefix: ""
+            settings:
+              renderRequestBody: true
+              encodeUrl: true
+              followRedirects: global
+              cookies:
+                send: true
+                store: true
+              rebuildPath: true
+          - url: "{{base_url}}/products/{{product_id}}"
+            name: Delete Product
+            meta:
+              id: req_f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7
+              created: 1773316707485
+              modified: 1773316707485
+              isPrivate: false
+              description: ""
+              sortKey: -1773316702542
+            method: DELETE
+            authentication:
+              type: bearer
+              disabled: false
+              token: "{{token}}"
+              prefix: ""
+            settings:
+              renderRequestBody: true
+              encodeUrl: true
+              followRedirects: global
+              cookies:
+                send: true
+                store: true
+              rebuildPath: true
 cookieJar:
   name: Default Jar
   meta:
@@ -338,3 +504,4 @@ environments:
     base_url: http://localhost:3000/api
     token: ""
     company_id: ""
+    product_id: ""

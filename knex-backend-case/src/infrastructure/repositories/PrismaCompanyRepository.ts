@@ -39,10 +39,11 @@ class PrismaCompanyRepository implements ICompanyRepository {
   }
 
   async countProducts(companyId: UUID): Promise<number> {
-    return prisma.product.count({ where: { companyId } });
+    return prisma.product.count({ where: { companyId, deletedAt: null } });
   }
 
   async delete(id: UUID): Promise<void> {
+    await prisma.product.deleteMany({ where: { companyId: id, deletedAt: { not: null } } });
     await prisma.company.delete({ where: { id } });
   }
 }

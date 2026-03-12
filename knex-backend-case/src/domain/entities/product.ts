@@ -1,5 +1,5 @@
 import { randomUUID, UUID } from "crypto";
-import { InvalidFieldError } from "../errors/InvalidFieldError";
+import { InvalidFieldError } from "../errors/InvalidFieldError.js";
 
 const MIN_NAME_LENGTH = 2;
 const MIN_DESCRIPTION_LENGTH = 10;
@@ -14,6 +14,7 @@ class Product {
     public companyId: UUID,
     public readonly createdAt: Date,
     public updatedAt: Date,
+    public deletedAt: Date | null,
   ) { }
 
   static criar(
@@ -27,7 +28,7 @@ class Product {
     Product.validateDescription(description);
     Product.validatePrice(price);
     Product.validateStock(stock);
-    return new Product(randomUUID(), name, description, price, stock, companyId, new Date(), new Date());
+    return new Product(randomUUID(), name, description, price, stock, companyId, new Date(), new Date(), null);
   }
 
   static carregar(
@@ -39,8 +40,9 @@ class Product {
     companyId: UUID,
     createdAt: Date,
     updatedAt: Date,
+    deletedAt: Date | null = null,
   ): Product {
-    return new Product(id, name, description, price, stock, companyId, createdAt, updatedAt);
+    return new Product(id, name, description, price, stock, companyId, createdAt, updatedAt, deletedAt);
   }
 
   private static validateName(name: string) {
@@ -89,6 +91,17 @@ class Product {
   changeDescription(newDescription: string) {
     Product.validateDescription(newDescription);
     this.description = newDescription;
+    this.updatedAt = new Date();
+  }
+
+  changeStock(newStock: number) {
+    Product.validateStock(newStock);
+    this.stock = newStock;
+    this.updatedAt = new Date();
+  }
+
+  softDelete() {
+    this.deletedAt = new Date();
     this.updatedAt = new Date();
   }
 }

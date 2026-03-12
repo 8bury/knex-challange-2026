@@ -13,6 +13,8 @@ class RegisterUserService {
   async execute(input: RegisterInput): Promise<RegisterOutput> {
     const { name, email, password } = input;
 
+    if (!name) throw new InvalidFieldError("name", "cannot be empty");
+    if (!email) throw new InvalidFieldError("email", "cannot be empty");
     if (!password || password.length < MIN_PASSWORD_LENGTH) {
       throw new InvalidFieldError("password", `must be at least ${MIN_PASSWORD_LENGTH} characters`);
     }
