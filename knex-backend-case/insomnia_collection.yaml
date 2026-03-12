@@ -487,6 +487,114 @@ collection:
                 send: true
                 store: true
               rebuildPath: true
+      - name: Transactions
+        meta:
+          id: fld_d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0
+          created: 1773316707490
+          modified: 1773316707490
+          sortKey: -1773316702541
+          description: ""
+        children:
+          - url: "{{base_url}}/transactions"
+            name: Create Transaction
+            meta:
+              id: req_a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8
+              created: 1773316707491
+              modified: 1773316707491
+              isPrivate: false
+              description: ""
+              sortKey: -1773316702540
+            method: POST
+            body:
+              mimeType: application/json
+              text: |-
+                {
+                	"productId": "{{product_id}}",
+                	"quantity": 2
+                }
+            headers:
+              - name: Content-Type
+                value: application/json
+            authentication:
+              type: bearer
+              disabled: false
+              token: "{{token}}"
+              prefix: ""
+            scripts:
+              afterResponse: |-
+                const response = await insomnia.response.json();
+                if (response.id) insomnia.environment.set("transaction_id", response.id);
+            settings:
+              renderRequestBody: true
+              encodeUrl: true
+              followRedirects: global
+              cookies:
+                send: true
+                store: true
+              rebuildPath: true
+          - url: "{{base_url}}/transactions"
+            name: List My Transactions
+            meta:
+              id: req_b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9
+              created: 1773316707492
+              modified: 1773316707492
+              isPrivate: false
+              description: ""
+              sortKey: -1773316702539
+            method: GET
+            parameters:
+              - name: page
+                value: "1"
+                disabled: true
+              - name: limit
+                value: "20"
+                disabled: true
+            authentication:
+              type: bearer
+              disabled: false
+              token: "{{token}}"
+              prefix: ""
+            settings:
+              renderRequestBody: true
+              encodeUrl: true
+              followRedirects: global
+              cookies:
+                send: true
+                store: true
+              rebuildPath: true
+          - url: "{{base_url}}/companies/{{company_id}}/transactions"
+            name: List Company Transactions
+            meta:
+              id: req_c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0
+              created: 1773316707493
+              modified: 1773316707493
+              isPrivate: false
+              description: ""
+              sortKey: -1773316702538
+            method: GET
+            parameters:
+              - name: page
+                value: "1"
+                disabled: true
+              - name: limit
+                value: "20"
+                disabled: true
+              - name: productId
+                value: "{{product_id}}"
+                disabled: true
+            authentication:
+              type: bearer
+              disabled: false
+              token: "{{token}}"
+              prefix: ""
+            settings:
+              renderRequestBody: true
+              encodeUrl: true
+              followRedirects: global
+              cookies:
+                send: true
+                store: true
+              rebuildPath: true
 cookieJar:
   name: Default Jar
   meta:
@@ -505,3 +613,4 @@ environments:
     token: ""
     company_id: ""
     product_id: ""
+    transaction_id: ""
