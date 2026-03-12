@@ -1,0 +1,271 @@
+type: collection.insomnia.rest/5.0
+schema_version: "5.1"
+name: Knex Sales API
+meta:
+  id: wrk_a8cc5f2d0acb4654aceaf75c3d0c5410
+  created: 1773316707449
+  modified: 1773316707449
+  description: ""
+collection:
+  - name: Knex Sales API
+    meta:
+      id: fld_d4b46c3beae34f369e1ec0799bf48ba6
+      created: 1773316707452
+      modified: 1773316707452
+      sortKey: -1773316702562
+      description: ""
+    children:
+      - name: Health
+        meta:
+          id: fld_fbfee7f1a9c748e59c09a598cf9ea364
+          created: 1773316707453
+          modified: 1773316707453
+          sortKey: -1773316702561
+          description: ""
+        children:
+          - url: "{{base_url}}/health"
+            name: Health Check
+            meta:
+              id: req_8161413060c248dd810bf8cc1e5aef32
+              created: 1773316707455
+              modified: 1773316721156
+              isPrivate: false
+              description: ""
+              sortKey: -1773316702560
+            method: GET
+            settings:
+              renderRequestBody: true
+              encodeUrl: true
+              followRedirects: global
+              cookies:
+                send: true
+                store: true
+              rebuildPath: true
+      - name: Auth
+        meta:
+          id: fld_51da1cd2b64d4177a362f280cbe8d8c4
+          created: 1773316707456
+          modified: 1773316707456
+          sortKey: -1773316702559
+          description: ""
+        children:
+          - url: "{{base_url}}/auth/register"
+            name: Register
+            meta:
+              id: req_030a0298eddb4365b96ac3ff90d6423b
+              created: 1773316707458
+              modified: 1773317007978
+              isPrivate: false
+              description: ""
+              sortKey: -1773316702558
+            method: POST
+            body:
+              mimeType: application/json
+              text: |-
+                {
+                	"name": "Teste Silva",
+                	"email": "teste@email.com",
+                	"password": "senhaSegura123"
+                }
+            headers:
+              - name: Content-Type
+                value: application/json
+            settings:
+              renderRequestBody: true
+              encodeUrl: true
+              followRedirects: global
+              cookies:
+                send: true
+                store: true
+              rebuildPath: true
+          - url: "{{base_url}}/auth/login"
+            name: Login
+            meta:
+              id: req_cb0e00d5780f4a17b66b88801e0bc97a
+              created: 1773316707460
+              modified: 1773317017721
+              isPrivate: false
+              description: ""
+              sortKey: -1773316702557
+            method: POST
+            body:
+              mimeType: application/json
+              text: |-
+                {
+                	"email": "teste@email.com",
+                	"password": "senhaSegura123"
+                }
+            headers:
+              - name: Content-Type
+                value: application/json
+            scripts:
+              afterResponse: |-
+                const response = await insomnia.response.json();
+                insomnia.environment.set("token", response.token);
+            settings:
+              renderRequestBody: true
+              encodeUrl: true
+              followRedirects: global
+              cookies:
+                send: true
+                store: true
+              rebuildPath: true
+          - url: "{{base_url}}/auth/profile"
+            name: Get Profile
+            meta:
+              id: req_6749459b4a924eafb298a4e07175f0eb
+              created: 1773316707461
+              modified: 1773317845353
+              isPrivate: false
+              description: ""
+              sortKey: -1773316702556
+            method: GET
+            authentication:
+              type: bearer
+              disabled: false
+              token: "{{token}}"
+              prefix: ""
+            settings:
+              renderRequestBody: true
+              encodeUrl: true
+              followRedirects: global
+              cookies:
+                send: true
+                store: true
+              rebuildPath: true
+      - name: Companies
+        meta:
+          id: fld_b3c12e8f7a1d4e2cb5f9a0d6e4b7c8d1
+          created: 1773316707470
+          modified: 1773316707470
+          sortKey: -1773316702555
+          description: ""
+        children:
+          - url: "{{base_url}}/companies"
+            name: Create Company
+            meta:
+              id: req_a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6
+              created: 1773316707471
+              modified: 1773316707471
+              isPrivate: false
+              description: ""
+              sortKey: -1773316702554
+            method: POST
+            body:
+              mimeType: application/json
+              text: |-
+                {
+                	"name": "Apple"
+                }
+            headers:
+              - name: Content-Type
+                value: application/json
+            authentication:
+              type: bearer
+              disabled: false
+              token: "{{token}}"
+              prefix: ""
+            settings:
+              renderRequestBody: true
+              encodeUrl: true
+              followRedirects: global
+              cookies:
+                send: true
+                store: true
+              rebuildPath: true
+          - url: "{{base_url}}/companies"
+            name: List Companies
+            meta:
+              id: req_b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7
+              created: 1773316707472
+              modified: 1773316707472
+              isPrivate: false
+              description: ""
+              sortKey: -1773316702553
+            method: GET
+            parameters:
+              - name: page
+                value: "1"
+                disabled: true
+              - name: limit
+                value: "20"
+                disabled: true
+              - name: search
+                value: ""
+                disabled: true
+            authentication:
+              type: bearer
+              disabled: false
+              token: "{{token}}"
+              prefix: ""
+            settings:
+              renderRequestBody: true
+              encodeUrl: true
+              followRedirects: global
+              cookies:
+                send: true
+                store: true
+              rebuildPath: true
+          - url: "{{base_url}}/companies/{{company_id}}"
+            name: Get Company Details
+            meta:
+              id: req_c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8
+              created: 1773316707473
+              modified: 1773316707473
+              isPrivate: false
+              description: ""
+              sortKey: -1773316702552
+            method: GET
+            authentication:
+              type: bearer
+              disabled: false
+              token: "{{token}}"
+              prefix: ""
+            settings:
+              renderRequestBody: true
+              encodeUrl: true
+              followRedirects: global
+              cookies:
+                send: true
+                store: true
+              rebuildPath: true
+          - url: "{{base_url}}/companies/{{company_id}}"
+            name: Delete Company
+            meta:
+              id: req_d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9
+              created: 1773316707474
+              modified: 1773316707474
+              isPrivate: false
+              description: ""
+              sortKey: -1773316702551
+            method: DELETE
+            authentication:
+              type: bearer
+              disabled: false
+              token: "{{token}}"
+              prefix: ""
+            settings:
+              renderRequestBody: true
+              encodeUrl: true
+              followRedirects: global
+              cookies:
+                send: true
+                store: true
+              rebuildPath: true
+cookieJar:
+  name: Default Jar
+  meta:
+    id: jar_3168e68598894c6a1b7583d25166512a3eb9a005
+    created: 1773316707467
+    modified: 1773316707467
+environments:
+  name: Variables
+  meta:
+    id: env_a2197bbb5f5b46d4a71d3b202bd3429f
+    created: 1773316707462
+    modified: 1773317857694
+    isPrivate: false
+  data:
+    base_url: http://localhost:3000/api
+    token: ""
+    company_id: ""
