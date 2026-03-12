@@ -252,6 +252,75 @@ collection:
                 send: true
                 store: true
               rebuildPath: true
+          - url: "{{base_url}}/companies/{{company_id}}/join"
+            name: Join Company
+            meta:
+              id: req_e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0
+              created: 1773316707475
+              modified: 1773316707475
+              isPrivate: false
+              description: ""
+              sortKey: -1773316702550
+            method: POST
+            authentication:
+              type: bearer
+              disabled: false
+              token: "{{token}}"
+              prefix: ""
+            settings:
+              renderRequestBody: true
+              encodeUrl: true
+              followRedirects: global
+              cookies:
+                send: true
+                store: true
+              rebuildPath: true
+          - url: "{{base_url}}/companies/{{company_id}}/leave"
+            name: Leave Company
+            meta:
+              id: req_f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1
+              created: 1773316707476
+              modified: 1773316707476
+              isPrivate: false
+              description: ""
+              sortKey: -1773316702549
+            method: POST
+            authentication:
+              type: bearer
+              disabled: false
+              token: "{{token}}"
+              prefix: ""
+            settings:
+              renderRequestBody: true
+              encodeUrl: true
+              followRedirects: global
+              cookies:
+                send: true
+                store: true
+              rebuildPath: true
+          - url: "{{base_url}}/companies/{{company_id}}/members"
+            name: List Company Members
+            meta:
+              id: req_a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2
+              created: 1773316707477
+              modified: 1773316707477
+              isPrivate: false
+              description: ""
+              sortKey: -1773316702548
+            method: GET
+            authentication:
+              type: bearer
+              disabled: false
+              token: "{{token}}"
+              prefix: ""
+            settings:
+              renderRequestBody: true
+              encodeUrl: true
+              followRedirects: global
+              cookies:
+                send: true
+                store: true
+              rebuildPath: true
 cookieJar:
   name: Default Jar
   meta:

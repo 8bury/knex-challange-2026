@@ -6,7 +6,12 @@ import { InvalidFieldError } from "../../domain/errors/InvalidFieldError.js";
 import { CreateCompanyService } from "../../application/services/CreateCompanyService.js";
 import { DeleteCompanyService } from "../../application/services/DeleteCompanyService.js";
 import { GetCompanyDetailsService } from "../../application/services/GetCompanyDetailsService.js";
+import { JoinCompanyService } from "../../application/services/JoinCompanyService.js";
+import { LeaveCompanyService } from "../../application/services/LeaveCompanyService.js";
 import { ListCompaniesService } from "../../application/services/ListCompaniesService.js";
+import { ListCompanyMembersService } from "../../application/services/ListCompanyMembersService.js";
+import { UserAlreadyInCompanyError } from "../../domain/errors/UserAlreadyInCompanyError.js";
+import { UserNotInCompanyError } from "../../domain/errors/UserNotInCompanyError.js";
 
 class CompanyController {
   constructor(
@@ -14,6 +19,9 @@ class CompanyController {
     private readonly listService: ListCompaniesService,
     private readonly detailsService: GetCompanyDetailsService,
     private readonly deleteService: DeleteCompanyService,
+    private readonly joinService: JoinCompanyService,
+    private readonly leaveService: LeaveCompanyService,
+    private readonly listMembersService: ListCompanyMembersService,
   ) {}
 
   async create(req: Request, res: Response): Promise<void> {
@@ -66,6 +74,53 @@ class CompanyController {
       }
       if (err instanceof CompanyHasAssociationsError) {
         res.status(409).json({ error: err.message });
+        return;
+      }
+      throw err;
+    }
+  }
+
+  async join(req: Request, res: Response): Promise<void> {
+    try {
+      const result = await this.joinService.execute(req.userId!, req.params["id"] as string);
+      res.status(200).json(result);
+    } catch (err) {
+      if (err instanceof CompanyNotFoundError) {
+        res.status(404).json({ error: err.message });
+        return;
+      }
+      if (err instanceof UserAlreadyInCompanyError) {
+        res.status(409).json({ error: err.message });
+        return;
+      }
+      throw err;
+    }
+  }
+
+  async leave(req: Request, res: Response): Promise<void> {
+    try {
+      await this.leaveService.execute(req.userId!, req.params["id"] as string);
+      res.status(204).send();
+    } catch (err) {
+      if (err instanceof CompanyNotFoundError) {
+        res.status(404).json({ error: err.message });
+        return;
+      }
+      if (err instanceof UserNotInCompanyError) {
+        res.status(409).json({ error: err.message });
+        return;
+      }
+      throw err;
+    }
+  }
+
+  async listMembers(req: Request, res: Response): Promise<void> {
+    try {
+      const result = await this.listMembersService.execute(req.params["id"] as string);
+      res.status(200).json(result);
+    } catch (err) {
+      if (err instanceof CompanyNotFoundError) {
+        res.status(404).json({ error: err.message });
         return;
       }
       throw err;

@@ -38,4 +38,15 @@ type CompanyDetailsOutput = {
   productsCount: number;
 };
 
-export { CreateCompanyInput, UpdateCompanyInput, CompanyOutput, CompanyListItem, CompanyListOutput, CompanyDetailsOutput };
+type JoinCompanyOutput = {
+  id: string;
+  name: string;
+  email: string;
+  company: { id: string; name: string };
+};
+
+type CompanyMembersOutput = {
+  data: { id: string; name: string; email: string }[];
+};
+
+export { CreateCompanyInput, UpdateCompanyInput, CompanyOutput, CompanyListItem, CompanyListOutput, CompanyDetailsOutput, JoinCompanyOutput, CompanyMembersOutput };
