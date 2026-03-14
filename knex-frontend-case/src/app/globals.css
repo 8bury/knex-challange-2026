@@ -1,0 +1,201 @@
+@import "tailwindcss";
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+
+  --color-brown-900: #653321;
+  --color-brown-700: #874b35;
+  --color-brown-500: #bc7d66;
+  --color-pink-400: #f69eac;
+  --color-pink-300: #f9c2ca;
+  --color-pink-200: #fbe0e4;
+  --color-peach-200: #ffcfbe;
+  --color-pink-50: #fff4f6;
+
+  --color-border-muted: #b09da0;
+  --color-brown-shadow: rgba(101, 51, 33, 0.5);
+
+  --color-c1: #ffffff;
+  --color-c2: #f0f0f0;
+  --color-c3: #e2e2e2;
+  --color-c4: #cfcfcf;
+  --color-c5: #b0b0b0;
+  --color-c6: #898989;
+  --color-c7: #6c6c6c;
+  --color-c8: #505050;
+  --color-c9: #333333;
+  --color-c10: #1f1f1f;
+  --color-c11: #111111;
+  --color-c12: #000000;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+  --font-roboto: var(--font-roboto);
+  --font-bahiana: var(--font-bahiana);
+
+  --color-brown-900: var(--color-brown-900);
+  --color-brown-700: var(--color-brown-700);
+  --color-brown-500: var(--color-brown-500);
+  --color-pink-400: var(--color-pink-400);
+  --color-pink-300: var(--color-pink-300);
+  --color-pink-200: var(--color-pink-200);
+  --color-peach-200: var(--color-peach-200);
+  --color-pink-50: var(--color-pink-50);
+
+  --color-c1: var(--color-c1);
+  --color-c2: var(--color-c2);
+  --color-c3: var(--color-c3);
+  --color-c4: var(--color-c4);
+  --color-c5: var(--color-c5);
+  --color-c6: var(--color-c6);
+  --color-c7: var(--color-c7);
+  --color-c8: var(--color-c8);
+  --color-c9: var(--color-c9);
+  --color-c10: var(--color-c10);
+  --color-c11: var(--color-c11);
+  --color-c12: var(--color-c12);
+
+  --spacing-004: 4px;
+  --spacing-008: 8px;
+  --spacing-012: 12px;
+  --spacing-016: 16px;
+  --spacing-020: 20px;
+  --spacing-024: 24px;
+  --spacing-032: 32px;
+  --spacing-036: 36px;
+  --spacing-040: 40px;
+  --spacing-048: 48px;
+  --spacing-060: 60px;
+  --spacing-072: 72px;
+  --spacing-080: 80px;
+  --spacing-120: 120px;
+  --spacing-160: 160px;
+  --spacing-200: 200px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* ── Nav ─────────────────────────────────────────────────── */
+
+.nav-link {
+  font-family: var(--font-roboto);
+  font-weight: 700;
+  font-size: 0.875rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-brown-900);
+  transition: color 0.15s ease;
+}
+
+.nav-link:hover {
+  color: var(--color-pink-400);
+}
+
+/* ── CTA button ──────────────────────────────────────────── */
+
+.btn-cta {
+  background-color: var(--color-pink-400);
+  color: var(--color-brown-900);
+  font-family: var(--font-roboto);
+  font-weight: 500;
+  font-size: 0.875rem;
+  border: 1px solid rgba(101, 51, 33, 0.2);
+  border-radius: 0.75rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.btn-cta:hover {
+  background-color: var(--color-pink-300);
+}
+
+/* ── Auth components ─────────────────────────────────────── */
+
+.input-field {
+  background-color: var(--color-pink-200);
+  border-radius: 0.75rem;
+  padding: var(--spacing-012) var(--spacing-016);
+  font-family: var(--font-roboto);
+  color: var(--color-c9);
+  font-size: 0.875rem;
+  border: 1px solid var(--color-brown-900);
+  box-shadow: 0px 4px 4px 0px var(--color-brown-shadow);
+  outline: none;
+  transition: all 0.15s ease;
+}
+
+.input-field:focus {
+  outline: 2px solid var(--color-pink-400);
+  outline-offset: 0px;
+}
+
+.auth-card {
+  position: relative;
+  z-index: 10;
+  background-color: var(--color-pink-50);
+  border-radius: 1rem;
+  padding: var(--spacing-048) var(--spacing-040);
+  border: 1px solid var(--color-border-muted);
+  box-shadow: 0px 4px 4px 0px var(--color-brown-900);
+}
+
+.btn-primary {
+  width: 100%;
+  background-color: var(--color-pink-400);
+  color: var(--color-brown-700);
+  font-family: var(--font-roboto);
+  font-weight: 500;
+  padding: var(--spacing-012) 0;
+  border-radius: 0.75rem;
+  margin-top: var(--spacing-008);
+  border: 1px solid var(--color-border-muted);
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.btn-primary:hover {
+  background-color: var(--color-pink-300);
+}
+
+.btn-primary:disabled {
+  opacity: 0.6;
+}
+
+.signup-tab {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 204px;
+  height: 33px;
+  padding: 16px 32px;
+  gap: 10px;
+  background: linear-gradient(180deg, #f69eac 91.4%, #161011 103.92%);
+  border: 1px solid var(--color-border-muted);
+  border-radius: 30px 30px 0px 0px;
+  font-family: var(--font-roboto);
+  font-size: 20px;
+  line-height: 23px;
+  color: var(--color-brown-900);
+  white-space: nowrap;
+}
+
+.logo-pink-filter {
+  filter: brightness(0) saturate(100%) invert(74%) sepia(27%) saturate(700%) hue-rotate(300deg)
+    brightness(105%);
+}

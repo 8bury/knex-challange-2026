@@ -44,7 +44,6 @@ export default function LoginPage() {
   return (
     <AuthLayout>
       <div className="relative w-full max-w-[360px]">
-        {/* Sign Up tab — behind the card */}
         <div className="absolute -top-[33px] left-1/2 -translate-x-1/2 z-0">
           <Link href="/register" className="signup-tab">
             Sign Up
