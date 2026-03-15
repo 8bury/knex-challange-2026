@@ -1,5 +1,5 @@
 import { randomUUID, UUID } from "crypto";
-import { InvalidFieldError } from "../errors/InvalidFieldError";
+import { InvalidFieldError } from "../errors/InvalidFieldError.js";
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const MIN_NAME_LENGTH = 2;

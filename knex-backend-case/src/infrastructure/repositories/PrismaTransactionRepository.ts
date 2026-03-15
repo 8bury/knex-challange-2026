@@ -30,7 +30,7 @@ class PrismaTransactionRepository implements ITransactionRepository {
   }
 
   async atomicPurchase(productId: UUID, quantity: number, data: AtomicPurchaseData): Promise<void> {
-    await prisma.$transaction(async (tx: typeof prisma) => {
+    await prisma.$transaction(async (tx) => {
       const result = await tx.product.updateMany({
         where: { id: productId, stock: { gte: quantity }, deletedAt: null },
         data: { stock: { decrement: quantity }, updatedAt: new Date() },

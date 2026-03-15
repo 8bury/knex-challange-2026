@@ -1,5 +1,5 @@
 import { randomUUID, UUID } from "crypto";
-import { InvalidFieldError } from "../errors/InvalidFieldError";
+import { InvalidFieldError } from "../errors/InvalidFieldError.js";
 
 class Transaction {
   private constructor(

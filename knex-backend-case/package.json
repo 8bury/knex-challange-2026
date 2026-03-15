@@ -2,6 +2,7 @@
   "name": "knex-backend-case",
   "version": "1.0.0",
   "description": "Sistema que permite empresas cadastrarem seus produtos e clientes comprarem de várias delas em um só lugar.",
+  "type": "module",
   "main": "index.js",
   "scripts": {
     "dev": "tsx watch src/main.ts",
