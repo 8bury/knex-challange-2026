@@ -30,6 +30,7 @@ type Action =
   | { type: 'fetch_error' }
   | { type: 'add'; product: Product }
   | { type: 'remove'; id: string }
+  | { type: 'update'; product: Product }
 
 function reducer(state: State, action: Action): State {
   switch (action.type) {
@@ -43,6 +44,11 @@ function reducer(state: State, action: Action): State {
       return { ...state, products: [...state.products, action.product] }
     case 'remove':
       return { ...state, products: state.products.filter((p) => p.id !== action.id) }
+    case 'update':
+      return {
+        ...state,
+        products: state.products.map((p) => (p.id === action.product.id ? action.product : p)),
+      }
   }
 }
 
@@ -71,5 +77,15 @@ export function useProducts(enabled: boolean) {
     dispatch({ type: 'remove', id })
   }
 
-  return { products, loading, error, addProduct, removeProduct }
+  async function updateProduct(
+    id: string,
+    data: Partial<{ name: string; description: string; price: number; index: number }>,
+  ) {
+    const res = await productsService.update(id, data)
+    const updated: Product =
+      (res.data as { product?: Product }).product ?? (res.data as unknown as Product)
+    dispatch({ type: 'update', product: updated })
+  }
+
+  return { products, loading, error, addProduct, removeProduct, updateProduct }
 }

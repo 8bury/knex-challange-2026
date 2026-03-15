@@ -1,10 +1,8 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
-import { productsService } from '@/services/products'
 import { Product } from '@/types'
 
 const schema = z.object({
@@ -14,56 +12,42 @@ const schema = z.object({
     .number({ message: 'Informe um valor válido' })
     .int('O preço deve ser inteiro')
     .positive('O valor deve ser maior que zero'),
-  photo: z.any().refine((fl: FileList) => fl?.length > 0, 'Foto é obrigatória'),
 })
 
 type FormData = z.infer<typeof schema>
 
-interface AddProductModalProps {
+interface EditProductModalProps {
+  product: Product
   onClose: () => void
-  onAdd: (product: Product) => void
+  onSave: (
+    id: string,
+    data: Partial<{ name: string; description: string; price: number; index: number }>,
+  ) => Promise<void>
 }
 
-export function AddProductModal({ onClose, onAdd }: AddProductModalProps) {
-  const [photoPreview, setPhotoPreview] = useState<string | null>(null)
-  const fileInputRef = useRef<HTMLInputElement | null>(null)
-
+export function EditProductModal({ product, onClose, onSave }: EditProductModalProps) {
   const {
     register,
     handleSubmit,
-    watch,
     setError,
     formState: { errors, isSubmitting },
-  } = useForm<FormData>({ resolver: zodResolver(schema) })
-
-  const photoFiles = watch('photo') as FileList | undefined
-
-  useEffect(() => {
-    const file = photoFiles?.[0]
-    if (!file) return
-    const url = URL.createObjectURL(file)
-    setPhotoPreview(url)
-    return () => URL.revokeObjectURL(url)
-  }, [photoFiles])
+  } = useForm<FormData>({
+    resolver: zodResolver(schema),
+    defaultValues: {
+      name: product.name,
+      description: product.description,
+      price: product.price,
+    },
+  })
 
   async function onSubmit(data: FormData) {
     try {
-      const uploadRes = await productsService.uploadFile(data.photo[0])
-      const file_id = uploadRes.data.file.id
-      const res = await productsService.create({
-        name: data.name,
-        description: data.description,
-        price: Math.floor(data.price),
-        file_id,
-      })
-      onAdd(res.data.product)
+      await onSave(product.id, data)
       onClose()
     } catch {
-      setError('root', { message: 'Erro ao adicionar produto. Tente novamente.' })
+      setError('root', { message: 'Erro ao atualizar produto. Tente novamente.' })
     }
   }
-
-  const { ref: photoRef, ...photoProps } = register('photo')
 
   return (
     <div
@@ -74,58 +58,12 @@ export function AddProductModal({ onClose, onAdd }: AddProductModalProps) {
         <div className="flex items-center justify-center gap-3 px-8 mb-2">
           <span className="w-10 h-[9px] rounded-full bg-[var(--color-pink-400)]" />
           <h2 className="font-bahiana text-5xl text-[var(--color-brown-900)] whitespace-nowrap">
-            Adicionar Produtos
+            Editar Produto
           </h2>
           <span className="w-10 h-[9px] rounded-full bg-[var(--color-pink-400)]" />
         </div>
 
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col">
-          <div className="px-[47px] mt-4">
-            <p className="font-roboto text-base text-[#694b41] mb-1">Foto:</p>
-            <input
-              type="file"
-              accept="image/*"
-              className="hidden"
-              {...photoProps}
-              ref={(el) => {
-                photoRef(el)
-                fileInputRef.current = el
-              }}
-            />
-            <button
-              type="button"
-              onClick={() => fileInputRef.current?.click()}
-              className="w-[235px] h-[203px] bg-white border border-[#653321] rounded-[10px] flex items-center justify-center overflow-hidden mx-auto block"
-            >
-              {photoPreview ? (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img src={photoPreview} alt="preview" className="w-full h-full object-cover" />
-              ) : (
-                <svg
-                  width="48"
-                  height="48"
-                  viewBox="0 0 44 36"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M16 4L12 10H4C2.9 10 2 10.9 2 12V32C2 33.1 2.9 34 4 34H40C41.1 34 42 33.1 42 32V12C42 10.9 41.1 10 40 10H32L28 4H16Z"
-                    stroke="#694b41"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                  <circle cx="22" cy="22" r="7" stroke="#694b41" strokeWidth="2" />
-                </svg>
-              )}
-            </button>
-            {errors.photo && (
-              <p className="mt-1 font-roboto text-xs text-red-500 text-center">
-                {errors.photo.message as string}
-              </p>
-            )}
-          </div>
-
           <div className="px-[47px] mt-4">
             <p className="font-roboto text-base text-[#694b41] mb-1">Nome:</p>
             <input
@@ -175,7 +113,7 @@ export function AddProductModal({ onClose, onAdd }: AddProductModalProps) {
               disabled={isSubmitting}
               className="mt-[26px] w-[74px] h-[34px] border border-[#b09da0] rounded-[10px] font-roboto text-base text-[var(--color-brown-900)] hover:bg-[var(--color-pink-300)] transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
             >
-              {isSubmitting ? '...' : '+'}
+              {isSubmitting ? '...' : '✓'}
             </button>
           </div>
         </form>

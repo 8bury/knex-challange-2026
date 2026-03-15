@@ -6,16 +6,21 @@ import { useAuth } from '@/hooks/useAuth'
 import { useProducts } from '@/hooks/useProducts'
 import { AddProductModal } from '@/components/products/AddProductModal'
 import { DeleteProductModal } from '@/components/products/DeleteProductModal'
+import { EditProductModal } from '@/components/products/EditProductModal'
 import { ProductCard } from '@/components/products/ProductCard'
 
 const PAGE_SIZE = 3
 
 export function ProductsSection() {
   const { isAuthenticated } = useAuth()
-  const { products, loading, error, addProduct, removeProduct } = useProducts(isAuthenticated)
+  const { products, loading, error, addProduct, removeProduct, updateProduct } =
+    useProducts(isAuthenticated)
 
   const [deleteTargetId, setDeleteTargetId] = useState<string | null>(null)
+  const [editTargetId, setEditTargetId] = useState<string | null>(null)
   const [showAddModal, setShowAddModal] = useState(false)
+
+  const editTarget = products.find((p) => p.id === editTargetId) ?? null
   const [carouselPage, setCarouselPage] = useState(0)
 
   const totalPages = Math.ceil(products.length / PAGE_SIZE)
@@ -91,6 +96,7 @@ export function ProductsSection() {
                   product={product}
                   canDelete={isAuthenticated}
                   onDelete={() => setDeleteTargetId(product.id)}
+                  onEdit={() => setEditTargetId(product.id)}
                 />
               ))}
             </div>
@@ -124,6 +130,14 @@ export function ProductsSection() {
 
       {showAddModal && (
         <AddProductModal onClose={() => setShowAddModal(false)} onAdd={addProduct} />
+      )}
+
+      {editTarget && (
+        <EditProductModal
+          product={editTarget}
+          onClose={() => setEditTargetId(null)}
+          onSave={updateProduct}
+        />
       )}
     </section>
   )
