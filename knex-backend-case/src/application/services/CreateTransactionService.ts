@@ -38,7 +38,6 @@ class CreateTransactionService {
       productId: transaction.productId,
       quantity: transaction.quantity,
       unitPrice: transaction.unitPrice,
-      totalPrice: transaction.totalPrice,
       createdAt: transaction.createdAt,
     };
   }

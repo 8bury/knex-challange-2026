@@ -2,8 +2,6 @@ import { randomUUID, UUID } from "crypto";
 import { InvalidFieldError } from "../errors/InvalidFieldError";
 
 class Transaction {
-  public readonly totalPrice: number;
-
   private constructor(
     public readonly id: UUID,
     public readonly userId: UUID,
@@ -14,7 +12,6 @@ class Transaction {
   ) {
     if (quantity <= 0) throw new InvalidFieldError("quantity", "must be greater than zero");
     if (unitPrice <= 0) throw new InvalidFieldError("unitPrice", "must be greater than zero");
-    this.totalPrice = quantity * unitPrice;
   }
 
   static criar(userId: UUID, productId: UUID, quantity: number, unitPrice: number): Transaction {

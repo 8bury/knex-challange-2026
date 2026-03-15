@@ -33,7 +33,6 @@ class ListCompanyTransactionsService {
         id: t.id,
         quantity: t.quantity,
         unitPrice: t.unitPrice,
-        totalPrice: t.totalPrice,
         createdAt: t.createdAt,
         buyer,
         product,

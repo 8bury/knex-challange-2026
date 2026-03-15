@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "companies" ADD CONSTRAINT "companies_name_key" UNIQUE ("name");

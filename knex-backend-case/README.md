@@ -4,45 +4,21 @@ API RESTful para gerenciamento de empresas, produtos e transações de venda.
 
 ## Requisitos
 
-- Node.js 20+
 - Docker e Docker Compose
 
 ## Como rodar
 
-**1. Instalar dependências**
 ```bash
-npm install
-```
-
-**2. Configurar variáveis de ambiente**
-
-Crie um arquivo `.env` na raiz do projeto:
-```env
-DATABASE_URL="postgresql://postgres:postgres@localhost:5432/knex_sales"
-JWT_SECRET="sua_chave_secreta"
-PORT=3000
-```
-
-**3. Subir o banco de dados**
-```bash
-docker compose up -d
-```
-
-**4. Rodar as migrations**
-```bash
-npm run migrate:deploy
-```
-
-**5. Iniciar o servidor**
-```bash
-# Desenvolvimento (hot reload)
-npm run dev
-
-# Produção
-npm run build && npm start
+docker compose up --build
 ```
 
 A API estará disponível em `http://localhost:3000`.
+
+> O banco de dados é criado e as migrations são aplicadas automaticamente.
+
+## Documentação
+
+As decisões de arquitetura, modelagem de domínio e convenções REST estão documentadas em [`docs/architecture.md`](docs/architecture.md).
 
 ## Testando com Insomnia
 

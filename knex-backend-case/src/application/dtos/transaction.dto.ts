@@ -9,7 +9,6 @@ type TransactionOutput = {
   productId: string;
   quantity: number;
   unitPrice: number;
-  totalPrice: number;
   createdAt: Date;
 };
 
@@ -17,7 +16,6 @@ type UserTransactionListItem = {
   id: string;
   quantity: number;
   unitPrice: number;
-  totalPrice: number;
   createdAt: Date;
   product: {
     id: string;
@@ -30,7 +28,6 @@ type CompanyTransactionListItem = {
   id: string;
   quantity: number;
   unitPrice: number;
-  totalPrice: number;
   createdAt: Date;
   buyer: { id: string; name: string };
   product: { id: string; name: string };
