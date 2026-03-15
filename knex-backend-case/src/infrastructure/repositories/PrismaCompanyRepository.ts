@@ -30,7 +30,8 @@ class PrismaCompanyRepository implements ICompanyRepository {
       prisma.company.findMany({ where, skip: (page - 1) * limit, take: limit, orderBy: { createdAt: "desc" } }),
       prisma.company.count({ where }),
     ]);
-    const companies = records.map((r) => Company.carregar(r.id as UUID, r.name, r.createdAt, r.updatedAt));
+    const companies = records.map((r: { id: string; name: string; createdAt: Date; updatedAt: Date }) =>
+      Company.carregar(r.id as UUID, r.name, r.createdAt, r.updatedAt));
     return { companies, total };
   }
 

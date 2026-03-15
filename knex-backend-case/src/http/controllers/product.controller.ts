@@ -1,13 +1,26 @@
 import { Request, Response } from "express";
-import { InvalidFieldError } from "../../domain/errors/InvalidFieldError.js";
-import { NotCompanyMemberError } from "../../domain/errors/NotCompanyMemberError.js";
-import { ProductNotFoundError } from "../../domain/errors/ProductNotFoundError.js";
-import { CompanyNotFoundError } from "../../domain/errors/CompanyNotFoundError.js";
+import { z } from "zod";
 import { CreateProductService } from "../../application/services/CreateProductService.js";
 import { DeleteProductService } from "../../application/services/DeleteProductService.js";
 import { GetProductDetailsService } from "../../application/services/GetProductDetailsService.js";
 import { ListProductsService } from "../../application/services/ListProductsService.js";
 import { UpdateProductService } from "../../application/services/UpdateProductService.js";
+
+const uuidSchema = z.string().uuid("Invalid ID format");
+
+const createProductSchema = z.object({
+  name: z.string().min(2, "Name must be at least 2 characters"),
+  description: z.string().min(10, "Description must be at least 10 characters"),
+  price: z.number().positive("Price must be greater than zero"),
+  stock: z.number().int().min(0, "Stock cannot be negative"),
+});
+
+const updateProductSchema = z.object({
+  name: z.string().min(2).optional(),
+  description: z.string().min(10).optional(),
+  price: z.number().positive().optional(),
+  stock: z.number().int().min(0).optional(),
+});
 
 class ProductController {
   constructor(
@@ -19,15 +32,10 @@ class ProductController {
   ) {}
 
   async create(req: Request, res: Response): Promise<void> {
-    try {
-      const result = await this.createService.execute(req.userId!, req.params["companyId"] as string, req.body);
-      res.status(201).json(result);
-    } catch (err) {
-      if (err instanceof InvalidFieldError) { res.status(422).json({ error: err.message }); return; }
-      if (err instanceof CompanyNotFoundError) { res.status(404).json({ error: err.message }); return; }
-      if (err instanceof NotCompanyMemberError) { res.status(403).json({ error: err.message }); return; }
-      throw err;
-    }
+    const companyId = uuidSchema.parse(req.params.companyId);
+    const body = createProductSchema.parse(req.body);
+    const result = await this.createService.execute(req.userId!, companyId, body);
+    res.status(201).json(result);
   }
 
   async list(req: Request, res: Response): Promise<void> {
@@ -37,42 +45,27 @@ class ProductController {
     const companyId = typeof req.query.companyId === "string" ? req.query.companyId : undefined;
     const minPrice = req.query.minPrice ? Number(req.query.minPrice) : undefined;
     const maxPrice = req.query.maxPrice ? Number(req.query.maxPrice) : undefined;
-
     const result = await this.listService.execute({ page, limit, search, companyId, minPrice, maxPrice });
     res.status(200).json(result);
   }
 
   async getDetails(req: Request, res: Response): Promise<void> {
-    try {
-      const result = await this.detailsService.execute(req.params["id"] as string);
-      res.status(200).json(result);
-    } catch (err) {
-      if (err instanceof ProductNotFoundError) { res.status(404).json({ error: err.message }); return; }
-      throw err;
-    }
+    const id = uuidSchema.parse(req.params.id);
+    const result = await this.detailsService.execute(id);
+    res.status(200).json(result);
   }
 
   async update(req: Request, res: Response): Promise<void> {
-    try {
-      const result = await this.updateService.execute(req.userId!, req.params["id"] as string, req.body);
-      res.status(200).json(result);
-    } catch (err) {
-      if (err instanceof InvalidFieldError) { res.status(422).json({ error: err.message }); return; }
-      if (err instanceof ProductNotFoundError) { res.status(404).json({ error: err.message }); return; }
-      if (err instanceof NotCompanyMemberError) { res.status(403).json({ error: err.message }); return; }
-      throw err;
-    }
+    const id = uuidSchema.parse(req.params.id);
+    const body = updateProductSchema.parse(req.body);
+    const result = await this.updateService.execute(req.userId!, id, body);
+    res.status(200).json(result);
   }
 
   async delete(req: Request, res: Response): Promise<void> {
-    try {
-      await this.deleteService.execute(req.userId!, req.params["id"] as string);
-      res.status(204).send();
-    } catch (err) {
-      if (err instanceof ProductNotFoundError) { res.status(404).json({ error: err.message }); return; }
-      if (err instanceof NotCompanyMemberError) { res.status(403).json({ error: err.message }); return; }
-      throw err;
-    }
+    const id = uuidSchema.parse(req.params.id);
+    await this.deleteService.execute(req.userId!, id);
+    res.status(204).send();
   }
 }
 

@@ -34,9 +34,14 @@ class PrismaUserRepository implements IUserRepository {
     );
   }
 
+  async findCompanyId(id: UUID): Promise<UUID | null> {
+    const record = await prisma.user.findUnique({ where: { id }, select: { companyId: true } });
+    return (record?.companyId as UUID | null) ?? null;
+  }
+
   async findByCompanyId(companyId: UUID): Promise<User[]> {
     const records = await prisma.user.findMany({ where: { companyId } });
-    return records.map((r) =>
+    return records.map((r: { id: string; name: string; email: string; passwordHash: string; companyId: string | null; createdAt: Date; updatedAt: Date; active: boolean }) =>
       User.carregar(r.id as UUID, r.name, r.email, r.passwordHash, r.companyId as UUID | null, r.createdAt, r.updatedAt, r.active),
     );
   }

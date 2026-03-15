@@ -1,12 +1,14 @@
 import { UUID } from "crypto";
 import { Transaction } from "../../domain/entities/transaction.js";
 import {
+  AtomicPurchaseData,
   ITransactionRepository,
   ListCompanyTransactionsParams,
   ListUserTransactionsParams,
   TransactionWithBuyerAndProduct,
   TransactionWithProduct,
 } from "../../domain/repositories/ITransactionRepository.js";
+import { InsufficientStockError } from "../../domain/errors/InsufficientStockError.js";
 import { prisma } from "../prisma/client.js";
 
 function toTransaction(r: { id: string; userId: string; productId: string; quantity: number; unitPrice: { toNumber(): number }; createdAt: Date }): Transaction {
@@ -27,6 +29,28 @@ class PrismaTransactionRepository implements ITransactionRepository {
     });
   }
 
+  async atomicPurchase(productId: UUID, quantity: number, data: AtomicPurchaseData): Promise<void> {
+    await prisma.$transaction(async (tx: typeof prisma) => {
+      const result = await tx.product.updateMany({
+        where: { id: productId, stock: { gte: quantity }, deletedAt: null },
+        data: { stock: { decrement: quantity }, updatedAt: new Date() },
+      });
+
+      if (result.count === 0) throw new InsufficientStockError();
+
+      await tx.transaction.create({
+        data: {
+          id: data.id,
+          userId: data.userId,
+          productId,
+          quantity,
+          unitPrice: data.unitPrice,
+          createdAt: data.createdAt,
+        },
+      });
+    });
+  }
+
   async findByUserId(userId: UUID, { page, limit }: ListUserTransactionsParams): Promise<{ items: TransactionWithProduct[]; total: number }> {
     const where = { userId };
     const [records, total] = await Promise.all([
@@ -40,7 +64,8 @@ class PrismaTransactionRepository implements ITransactionRepository {
       prisma.transaction.count({ where }),
     ]);
 
-    const items: TransactionWithProduct[] = records.map((r) => ({
+    type TxWithProductRecord = Parameters<typeof toTransaction>[0] & { product: { id: string; name: string; company: { id: string; name: string } } };
+    const items: TransactionWithProduct[] = records.map((r: TxWithProductRecord) => ({
       transaction: toTransaction(r),
       product: { id: r.product.id, name: r.product.name, company: { id: r.product.company.id, name: r.product.company.name } },
     }));
@@ -63,7 +88,8 @@ class PrismaTransactionRepository implements ITransactionRepository {
       prisma.transaction.count({ where }),
     ]);
 
-    const items: TransactionWithBuyerAndProduct[] = records.map((r) => ({
+    type TxWithBuyerRecord = Parameters<typeof toTransaction>[0] & { user: { id: string; name: string }; product: { id: string; name: string } };
+    const items: TransactionWithBuyerAndProduct[] = records.map((r: TxWithBuyerRecord) => ({
       transaction: toTransaction(r),
       buyer: { id: r.user.id, name: r.user.name },
       product: { id: r.product.id, name: r.product.name },

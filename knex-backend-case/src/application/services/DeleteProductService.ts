@@ -14,10 +14,11 @@ class DeleteProductService {
     const product = await this.productRepository.findById(productId as UUID);
     if (!product) throw new ProductNotFoundError();
 
-    const user = await this.userRepository.findById(userId as UUID);
-    if (!user || user.companyId !== product.companyId) throw new NotCompanyMemberError();
+    const userCompanyId = await this.userRepository.findCompanyId(userId as UUID);
+    if (userCompanyId !== product.companyId) throw new NotCompanyMemberError();
 
-    await this.productRepository.softDelete(productId as UUID);
+    product.softDelete();
+    await this.productRepository.save(product);
   }
 }
 

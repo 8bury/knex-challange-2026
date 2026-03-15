@@ -25,9 +25,12 @@ class CreateTransactionService {
 
     const transaction = Transaction.criar(userId as UUID, product.id, input.quantity, product.price);
 
-    product.decreaseStock(input.quantity);
-    await this.productRepository.save(product);
-    await this.transactionRepository.save(transaction);
+    await this.transactionRepository.atomicPurchase(product.id, input.quantity, {
+      id: transaction.id,
+      userId: transaction.userId,
+      unitPrice: transaction.unitPrice,
+      createdAt: transaction.createdAt,
+    });
 
     return {
       id: transaction.id,

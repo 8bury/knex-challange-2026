@@ -20,7 +20,6 @@ interface IProductRepository {
   findByIdWithCompany(id: UUID): Promise<ProductWithCompany | null>;
   findAll(params: ListProductsParams): Promise<{ items: ProductWithCompany[]; total: number }>;
   save(product: Product): Promise<void>;
-  softDelete(id: UUID): Promise<void>;
 }
 
 export { IProductRepository, ListProductsParams, ProductWithCompany };

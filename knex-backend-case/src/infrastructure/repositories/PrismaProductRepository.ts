@@ -38,7 +38,8 @@ class PrismaProductRepository implements IProductRepository {
       prisma.product.count({ where }),
     ]);
 
-    const items = records.map((r) => ({ product: toProduct(r), company: { id: r.company.id, name: r.company.name } }));
+    type ProductRecord = Parameters<typeof toProduct>[0] & { company: { id: string; name: string } };
+    const items = records.map((r: ProductRecord) => ({ product: toProduct(r), company: { id: r.company.id, name: r.company.name } }));
     return { items, total };
   }
 
@@ -67,9 +68,6 @@ class PrismaProductRepository implements IProductRepository {
     });
   }
 
-  async softDelete(id: UUID): Promise<void> {
-    await prisma.product.update({ where: { id }, data: { deletedAt: new Date() } });
-  }
 }
 
 export { PrismaProductRepository };

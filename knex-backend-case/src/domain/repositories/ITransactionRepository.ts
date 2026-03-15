@@ -23,10 +23,18 @@ type ListCompanyTransactionsParams = {
   productId?: string;
 };
 
+type AtomicPurchaseData = {
+  id: UUID;
+  userId: UUID;
+  unitPrice: number;
+  createdAt: Date;
+};
+
 interface ITransactionRepository {
   save(transaction: Transaction): Promise<void>;
+  atomicPurchase(productId: UUID, quantity: number, data: AtomicPurchaseData): Promise<void>;
   findByUserId(userId: UUID, params: ListUserTransactionsParams): Promise<{ items: TransactionWithProduct[]; total: number }>;
   findByCompanyId(companyId: UUID, params: ListCompanyTransactionsParams): Promise<{ items: TransactionWithBuyerAndProduct[]; total: number }>;
 }
 
-export { ITransactionRepository, TransactionWithProduct, TransactionWithBuyerAndProduct, ListUserTransactionsParams, ListCompanyTransactionsParams };
+export { ITransactionRepository, AtomicPurchaseData, TransactionWithProduct, TransactionWithBuyerAndProduct, ListUserTransactionsParams, ListCompanyTransactionsParams };
