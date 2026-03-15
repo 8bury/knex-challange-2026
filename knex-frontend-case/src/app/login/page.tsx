@@ -7,6 +7,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import Cookies from 'js-cookie'
 import { authService } from '@/services/auth'
+import { useAuth } from '@/hooks/useAuth'
 import AuthLayout from '@/components/ui/AuthLayout'
 import FormField from '@/components/forms/FormField'
 
@@ -19,6 +20,7 @@ type LoginFormData = z.infer<typeof loginSchema>
 
 export default function LoginPage() {
   const router = useRouter()
+  const { setAuthenticated } = useAuth()
 
   const {
     register,
@@ -35,6 +37,7 @@ export default function LoginPage() {
         secure: process.env.NODE_ENV === 'production',
         sameSite: 'strict',
       })
+      setAuthenticated(true)
       router.push('/')
     } catch {
       setError('root', { message: 'Email ou senha incorretos' })
