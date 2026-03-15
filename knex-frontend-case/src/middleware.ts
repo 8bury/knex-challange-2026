@@ -12,10 +12,9 @@ export function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL('/login', request.url))
   }
 
-return NextResponse.next()
+  return NextResponse.next()
 }
 
 export const config = {
-  // Skip Next internals and any static file (anything with a dot in the path).
   matcher: ['/((?!_next/static|_next/image|favicon.ico|.*\\..*).*)'],
 }

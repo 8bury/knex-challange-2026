@@ -46,7 +46,7 @@ export default function RegisterPage() {
         secure: process.env.NODE_ENV === 'production',
         sameSite: 'strict',
       })
-      router.push('/dashboard')
+      router.push('/')
     } catch {
       setError('root', { message: 'Erro ao cadastrar. Tente novamente.' })
     }

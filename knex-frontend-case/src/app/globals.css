@@ -37,6 +37,7 @@
   --font-mono: var(--font-geist-mono);
   --font-roboto: var(--font-roboto);
   --font-bahiana: var(--font-bahiana);
+  --font-sevillana: var(--font-sevillana);
 
   --color-brown-900: var(--color-brown-900);
   --color-brown-700: var(--color-brown-700);
@@ -91,7 +92,9 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
-/* ── Nav ─────────────────────────────────────────────────── */
+button {
+  cursor: pointer;
+}
 
 .nav-link {
   font-family: var(--font-roboto);
@@ -106,8 +109,6 @@ body {
 .nav-link:hover {
   color: var(--color-pink-400);
 }
-
-/* ── CTA button ──────────────────────────────────────────── */
 
 .btn-cta {
   background-color: var(--color-pink-400);
@@ -124,8 +125,6 @@ body {
 .btn-cta:hover {
   background-color: var(--color-pink-300);
 }
-
-/* ── Auth components ─────────────────────────────────────── */
 
 .input-field {
   background-color: var(--color-pink-200);

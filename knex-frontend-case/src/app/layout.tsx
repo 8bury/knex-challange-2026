@@ -1,22 +1,32 @@
 import type { Metadata } from 'next'
-import { Geist, Geist_Mono, Roboto } from 'next/font/google'
+import { Geist, Geist_Mono, Roboto, Sevillana } from 'next/font/google'
 import localFont from 'next/font/local'
 import './globals.css'
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
   subsets: ['latin'],
+  display: 'swap',
 })
 
 const geistMono = Geist_Mono({
   variable: '--font-geist-mono',
   subsets: ['latin'],
+  display: 'swap',
 })
 
 const roboto = Roboto({
   variable: '--font-roboto',
   subsets: ['latin'],
   weight: ['400', '500', '700'],
+  display: 'swap',
+})
+
+const sevillana = Sevillana({
+  variable: '--font-sevillana',
+  subsets: ['latin'],
+  weight: '400',
+  display: 'swap',
 })
 
 const bahiana = localFont({
@@ -38,7 +48,7 @@ export default function RootLayout({
   return (
     <html lang="pt-BR">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${roboto.variable} ${bahiana.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} ${roboto.variable} ${bahiana.variable} ${sevillana.variable} antialiased`}
       >
         {children}
       </body>
