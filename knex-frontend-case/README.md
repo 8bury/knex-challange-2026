@@ -2,6 +2,16 @@
 
 Site vitrine de uma loja de cupcakes com painel de gerenciamento de produtos. Desenvolvido com **Next.js 16**, **React 19**, **TypeScript**, **Tailwind CSS v4**, **React Hook Form** e **Zod**.
 
+## 🚀 Produção
+
+| | URL |
+|---|---|
+| **Site** | https://cupandcake.pedrosales.dev |
+
+**Deploy:** [Vercel](https://vercel.com/).
+
+---
+
 ## Funcionalidades
 
 - Pagina de **registro** e **login** com validação em tempo real

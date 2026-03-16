@@ -2,6 +2,17 @@
 
 API RESTful para gerenciamento de empresas, produtos e transações de venda.
 
+## 🚀 Produção
+
+| | URL |
+|---|---|
+| **API** | https://api-knex-sales.pedrosales.dev |
+| **Health check** | https://api-knex-sales.pedrosales.dev/api/health |
+
+**Deploy:** [Coolify](https://coolify.io/) em servidor VPS na [Hetzner](https://www.hetzner.com/).
+
+---
+
 ## Requisitos
 
 - Docker e Docker Compose
